@@ -1,0 +1,205 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    position: relative;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+}
+
+.logo {
+    height: 100px; /* Increased height */
+    width: auto; /* Maintain aspect ratio */
+}
+
+.header-container {
+    background-color: white;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+.contact-info {
+    text-align: right;
+}
+
+.nav-container {
+    background-color: #f0e68c;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: center; /* Center the navigation */
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    margin: 0;
+    padding: 0;
+}
+
+nav a {
+    text-decoration: none;
+    color: #000;
+}
+
+.banner {
+    position: relative;
+    text-align: center;
+    color: white;
+    background-color: #f0e68c;
+    padding: 0px 0;
+}
+
+.banner img {
+    width: 100%;
+    height: auto;
+}
+
+.banner-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.banner-text h1 {
+    font-size: 2em;
+}
+
+.banner-text p {
+    font-size: 1.5em;
+}
+
+.banner-text button {
+    background-color: #32cd32;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.features {
+    position: absolute;
+    top: 80%;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    padding: 20px;
+    background-color: transparent;
+}
+
+.card {
+    background-color: white;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    width: 300px;
+}
+
+.feature {
+    background-color: white; /* Ensure the feature background is white */
+    border-radius: 12px;
+}
+
+.feature img {
+    width: 100%;
+    height: auto;
+    max-width: 250px;
+}
+
+.feature h3 {
+    background-color: white; /* Change background color to white */
+    color: green; /* Change font color to green */
+    padding: 10px;
+    margin: -20px -20px 20px;
+    border-radius: 12px 12px 0 0;
+}
+
+.feature p {
+    color: black;
+    margin: 10px 0;
+}
+
+/* Additional CSS for new sections */
+#about, #why-choose, #services {
+    margin-bottom: 40px;
+    padding: 20px;
+}
+
+#about h2, #why-choose h2, #services h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+#about h3, #services h3 {
+    font-size: 20px;
+    margin-bottom: 5px;
+}
+
+#about h4 {
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+#about p, #why-choose p, #services p {
+    margin-bottom: 10px;
+}
+
+#why-choose img {
+    width: 100%;
+    height: auto;
+    margin-top: 10px;
+}
+
+.service-card {
+    display: inline-block;
+    width: 30%;
+    margin: 10px;
+    text-align: center;
+}
+
+.service-card img {
+    width: 100%;
+    height: auto;
+}
+
+footer {
+    background-color: #f8f8f8;
+    padding: 20px;
+    text-align: center;
+}
+
+footer img {
+    width: 100px;
+    margin-bottom: 10px;
+}
+
+footer ul {
+    list-style: none;
+    padding: 0;
+}
+
+footer ul li {
+    display: inline;
+    margin: 0 10px;
+}
+
+footer ul li a {
+    text-decoration: none;
+    color: #333;
+}
+
+footer .social-media {
+    margin-top: 10px;
+}
