@@ -334,6 +334,5 @@
         <!-- Social media icons -->
     </div>
 </footer>
-
 </body>
 </html>
