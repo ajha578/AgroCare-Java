@@ -130,7 +130,8 @@
                     <input type="radio" name="role" value="farmer" checked> Farmer
                 </label>
             </div>
-            <form action="<%= request.getContextPath() %>/RegisterServlet" method="post">
+            <form action="<%= request.getContextPath() %>/
+            RegisterServlet" method="post">
             <div class="input-group">
                 <label for="name">Name</label>
                 <input type="text" id="name">

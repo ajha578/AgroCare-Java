@@ -97,17 +97,6 @@
             font-weight: bold; /* Signup in bold */
         }
     </style>
-    <script>
-        function handleRoleChange(event) {
-            if (event.target.value === 'farmer') {
-                window.location.href = 'login-farmer.jsp';
-            }
-        }
-
-        function handleSubmit() {
-            window.location.href = 'dashboard-buyer-fruit.jsp';
-        }
-    </script>
 </head>
 <body>
     <div class="wrapper">
@@ -123,16 +112,20 @@
                     <input type="radio" name="role" value="buyer" checked> Buyer
                 </label>
                 <label>
-                    <input type="radio" name="role" value="farmer" onclick="handleRoleChange(event)"> Farmer
+                    <input type="radio" name="role" value="farmer" onclick="window.location.href='login-farmer.jsp'"> Farmer
                 </label>
             </div>
-            <div class="input-group">
-                <label for="email">Email</label>
-                <input type="email" id="email">
-                <label for="password">Password</label>
-                <input type="password" id="password">
-            </div>
-            <button class="button" onclick="handleSubmit()">Login</button>
+            <!-- Updated form -->
+            <form action="<%= request.getContextPath() %>/LoginServlet" method="post">
+                <div class="input-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button class="button" type="submit">Login</button>
+            </form>
             <div class="link">
                 Don't have an account? <a href="create-buyer.jsp">Signup</a>
             </div>
