@@ -84,7 +84,6 @@
             font-size: 16px; /* Increased font size */
             font-weight: bold; /* Bold font */
             margin: 0 auto; /* Center the button */
-
         }
         .button:hover {
             background-color: #8A6811;
@@ -102,14 +101,16 @@
         }
     </style>
     <script>
-        function handleRoleChange(event) {
-            if (event.target.value === 'buyer') {
-                window.location.href = 'create-buyer.jsp';
-            }
-        }
+        function validateForm() {
+            const name = document.getElementById('name').value;
+            const phone = document.getElementById('phone').value;
+            const password = document.getElementById('password').value;
 
-        function handleSubmit() {
-            window.location.href = 'login-farmer.jsp';
+            if (!name || !phone || !password) {
+                alert('All fields are required!');
+                return false;
+            }
+            return true;
         }
     </script>
 </head>
@@ -124,27 +125,27 @@
             <div class="sub-title">Choose your role below</div>
             <div class="role-selection">
                 <label>
-                    <input type="radio" name="role" value="buyer" onclick="handleRoleChange(event)"> Buyer
+                    <input type="radio" name="role" value="buyer" onclick="window.location.href='create-buyer.jsp'"> Buyer
                 </label>
                 <label>
                     <input type="radio" name="role" value="farmer" checked> Farmer
                 </label>
             </div>
-            <form action="<%= request.getContextPath() %>/
-            RegisterServlet" method="post">
-            <div class="input-group">
-                <label for="name">Name</label>
-                <input type="text" id="name">
-            </div>
-            <div class="input-group">
-                <label for="phone">Phone Number</label>
-                <input type="text" id="phone">
-            </div>
-            <div class="input-group">
-                <label for="password">Password</label>
-                <input type="password" id="password">
-            </div>
-            <button class="button" onclick="handleSubmit()">Create Account</button>
+            <form action="<%= request.getContextPath() %>/Registerfarmer" method="post" onsubmit="return validateForm()">
+                <div class="input-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name">
+                </div>
+                <div class="input-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="text" id="phone" name="phone">
+                </div>
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password">
+                </div>
+                <button class="button" type="submit">Create Account</button>
+            </form>
             <div class="link">
                 Already have an account? <a href="login-farmer.jsp">Login</a>
             </div>

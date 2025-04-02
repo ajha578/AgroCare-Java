@@ -29,4 +29,24 @@
     <servlet-name>LoginServlet</servlet-name>
     <url-pattern>/LoginServlet</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>Registerfarmer</display-name>
+    <servlet-name>Registerfarmer</servlet-name>
+    <servlet-class>Registerfarmer</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Registerfarmer</servlet-name>
+    <url-pattern>/Registerfarmer</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>loginfarmer</display-name>
+    <servlet-name>loginfarmer</servlet-name>
+    <servlet-class>loginfarmer</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>loginfarmer</servlet-name>
+    <url-pattern>/loginfarmer</url-pattern>
+  </servlet-mapping>
 </web-app>

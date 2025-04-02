@@ -97,17 +97,6 @@
             font-weight: bold; /* Signup in bold */
         }
     </style>
-    <script>
-        function handleRoleChange(event) {
-            if (event.target.value === 'buyer') {
-                window.location.href = 'login-buyer.jsp';
-            }
-        }
-
-        function handleSubmit() {
-            window.location.href = 'dashboard.jsp';
-        }
-    </script>
 </head>
 <body>
     <div class="wrapper">
@@ -120,19 +109,24 @@
             <div class="role-selection">
                 <div class="role-selection-title">Choose your role</div>
                 <label>
-                    <input type="radio" name="role" value="buyer" onclick="handleRoleChange(event)"> Buyer
+                    <input type="radio" name="role" value="buyer" onclick="window.location.href='login-buyer.jsp'"> Buyer
                 </label>
                 <label>
                     <input type="radio" name="role" value="farmer" checked> Farmer
                 </label>
             </div>
-            <div class="input-group">
-                <label for="email">Phone no</label>
-                <input type="number" id="email">
-                <label for="password">Password</label>
-                <input type="password" id="password">
-            </div>
-            <button class="button" onclick="handleSubmit()">Login</button>
+            <!-- Updated form to work with the servlet -->
+            <form action="<%= request.getContextPath() %>/loginfarmer" method="post">
+                <div class="input-group">
+                    <label for="phone">Phone no</label>
+                    <input type="text" id="phone" name="phone" required>
+                </div>
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button class="button" type="submit">Login</button>
+            </form>
             <div class="link">
                 Don't have an account? <a href="create-farmer.jsp">Signup</a>
             </div>
