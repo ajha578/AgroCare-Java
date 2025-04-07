@@ -3,6 +3,7 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import jakarta.servlet.ServletException;
@@ -13,12 +14,12 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @WebServlet("/Registerfarmer")
 public class Registerfarmer extends HttpServlet {
-    private static final String DB_URL = "jdbc:mysql://localhost:3306/project";
-    private static final String DB_USER = "root"; // Replace with your database username
-    private static final String DB_PASSWORD = ""; // Replace with your database password
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/project?useSSL=false&serverTimezone=UTC";
+    private static final String DB_USER = "root";
+    private static final String DB_PASSWORD = "";
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
 
@@ -26,33 +27,42 @@ public class Registerfarmer extends HttpServlet {
         String phone = request.getParameter("phone");
         String password = request.getParameter("password");
 
-        // Validate user inputs (optional, based on your requirements)
         if (name == null || phone == null || password == null || name.isEmpty() || phone.isEmpty() || password.isEmpty()) {
-            out.println("<h3 style='color:red;'>All fields are mandatory!</h3>");
+            request.setAttribute("errorMessage", "All fields are mandatory!");
+            request.getRequestDispatcher("views/create-farmer.jsp").forward(request, response);
             return;
         }
 
-        // Database insertion logic
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+            Class.forName("com.mysql.cj.jdbc.Driver"); // Load the MySQL JDBC driver
 
-            String query = "INSERT INTO farmers (name, phone, password) VALUES (?, ?, ?)";
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1, name);
-            preparedStatement.setString(2, phone);
-            preparedStatement.setString(3, password);
+            try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
+                String checkQuery = "SELECT COUNT(*) FROM farmers WHERE phone = ?";
+                PreparedStatement checkStmt = connection.prepareStatement(checkQuery);
+                checkStmt.setString(1, phone);
+                ResultSet resultSet = checkStmt.executeQuery();
+                resultSet.next();
+                if (resultSet.getInt(1) > 0) {
+                    request.setAttribute("errorMessage", "Phone number already registered. Please try login.");
+                    request.getRequestDispatcher("views/create-farmer.jsp").forward(request, response);
+                    return;
+                }
 
-            int result = preparedStatement.executeUpdate();
-            if (result > 0) {
-                out.println("<h3 style='color:green;'>Account created successfully!</h3>");
-                response.sendRedirect("views/login-farmer.jsp"); // Redirect to login page
-            } else {
-                out.println("<h3 style='color:red;'>Failed to create account. Please try again.</h3>");
+                String insertQuery = "INSERT INTO farmers (name, phone, password) VALUES (?, ?, ?)";
+                PreparedStatement insertStmt = connection.prepareStatement(insertQuery);
+                insertStmt.setString(1, name);
+                insertStmt.setString(2, phone);
+                insertStmt.setString(3, password);
+                int result = insertStmt.executeUpdate();
+
+                if (result > 0) {
+                    response.sendRedirect("views/login-farmer.jsp");
+                } else {
+                    request.setAttribute("errorMessage", "Failed to create account. Please try again.");
+                    request.getRequestDispatcher("views/create-farmer.jsp").forward(request, response);
+                }
             }
 
-            preparedStatement.close();
-            connection.close();
         } catch (ClassNotFoundException e) {
             out.println("<h3 style='color:red;'>Error loading database driver: " + e.getMessage() + "</h3>");
         } catch (SQLException e) {

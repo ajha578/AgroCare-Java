@@ -1,42 +1,28 @@
-
-
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-/**
- * Servlet implementation class LoginServlet
- */
+@WebServlet("/LoginServlet") // URL mapping
 public class LoginServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
+    private static final long serialVersionUID = 1L;
+
     public LoginServlet() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		String email = request.getParameter("email");
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String email = request.getParameter("email");
         String password = request.getParameter("password");
-
-        PrintWriter out = response.getWriter();
-        response.setContentType("text/html");
 
         // Database connection parameters
         String jdbcURL = "jdbc:mysql://localhost:3306/project"; // Adjust the database name
@@ -64,18 +50,25 @@ public class LoginServlet extends HttpServlet {
 
             // Check if a matching user is found
             if (resultSet.next()) {
-                out.println("<h3>Login successful! Welcome, " + resultSet.getString("name") + ".</h3>");
-                // Redirect to dashboard or next page
+                // Valid login: Create session and redirect to dashboard
+                HttpSession session = request.getSession();
+                session.setAttribute("userName", resultSet.getString("name"));
+                session.setAttribute("userEmail", email);
                 response.sendRedirect("views/dashboard-buyer-fruit.jsp");
             } else {
-                out.println("<h3>Invalid email or password. Please try again.</h3>");
+                // Invalid credentials: Set error message and user-entered values
+                request.setAttribute("errorMessage", "Invalid email or password. Please try again.");
+                request.setAttribute("enteredEmail", email); // Pass user-entered email
+                request.getRequestDispatcher("views/login-buyer.jsp").forward(request, response);
             }
         } catch (ClassNotFoundException e) {
-            out.println("<h3>Error: Unable to load database driver.</h3>");
-            e.printStackTrace(out);
+            e.printStackTrace();
+            request.setAttribute("errorMessage", "Error: Unable to load database driver.");
+            request.getRequestDispatcher("views/login-buyer.jsp").forward(request, response);
         } catch (SQLException e) {
-            out.println("<h3>Error: Database connection or query failed.</h3>");
-            e.printStackTrace(out);
+            e.printStackTrace();
+            request.setAttribute("errorMessage", "Error: Database connection or query failed.");
+            request.getRequestDispatcher("views/login-buyer.jsp").forward(request, response);
         } finally {
             // Close resources
             try {
@@ -83,7 +76,7 @@ public class LoginServlet extends HttpServlet {
                 if (preparedStatement != null) preparedStatement.close();
                 if (connection != null) connection.close();
             } catch (SQLException e) {
-                e.printStackTrace(out);
+                e.printStackTrace();
             }
         }
     }

@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,8 +21,8 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         .left-panel {
-            background-image: url('../image/create.png'); /* Replace with your image path */
-            background-size: 150%; /* Zoom out the image */
+            background-image: url('<%= request.getContextPath() %>/image/create.png'); /* Dynamic path */
+            background-size: 150%;
             background-position: center;
             width: 300px;
             border-top-left-radius: 5px;
@@ -33,19 +33,25 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            width: 300px; /* Adjust the width as needed */
+            width: 300px;
         }
         .logo {
             text-align: center;
             margin-bottom: 20px;
         }
         .logo img {
-            max-width: 100px; /* Adjust logo size as needed */
+            max-width: 100px;
         }
         .title {
             font-size: 24px;
-            margin-bottom: 10px; /* Reduced margin to fit the additional text */
+            margin-bottom: 10px;
             text-align: center;
+        }
+        .error-message {
+            color: red;
+            text-align: center;
+            margin-bottom: 10px;
+            font-weight: bold;
         }
         .role-selection {
             margin-bottom: 15px;
@@ -63,24 +69,24 @@
             margin-bottom: 5px;
         }
         .input-group input {
-            width: 90%; /* Decreased size of the textboxes */
+            width: 90%;
             padding: 8px;
             margin-bottom: 10px;
             border: 1px solid #ccc;
-            border-radius: 10px; /* Added border-radius */
-            background-color: #d3d3d3; /* Grey color for the textboxes */
+            border-radius: 10px;
+            background-color: #d3d3d3;
         }
         .button {
-            width: 80%; /* Decreased button size */
+            width: 80%;
             padding: 12px;
-            background-color: #B08B12; /* Darker button color */
-            color: black; /* Changed text color to black */
+            background-color: #B08B12;
+            color: black;
             border: none;
-            border-radius: 30px; /* Added more border-radius */
+            border-radius: 30px;
             cursor: pointer;
-            font-size: 16px; /* Increased font size */
-            font-weight: bold; /* Bold font */
-            margin: 0 auto; /* Center the button */
+            font-size: 16px;
+            font-weight: bold;
+            margin: 0 auto;
         }
         .button:hover {
             background-color: #8A6811;
@@ -88,47 +94,67 @@
         .link {
             margin-top: 10px;
             text-align: center;
-            color: black; /* Changed to black */
-            font-weight: normal; /* Normal font */
+            color: black;
         }
         .link a {
-            color: black; /* Ensure link color matches */
+            color: black;
             text-decoration: none;
-            font-weight: bold; /* Signup in bold */
+            font-weight: bold;
         }
     </style>
+    <script>
+        // Function to clear error messages when switching roles
+        function clearErrorMessage() {
+            const errorMessageElement = document.querySelector('.error-message');
+            if (errorMessageElement) {
+                errorMessageElement.textContent = ''; // Clear error message
+            }
+        }
+    </script>
 </head>
 <body>
     <div class="wrapper">
         <div class="left-panel"></div>
         <div class="right-panel">
             <div class="logo">
-                <img src="../image/create-logo.png" alt="Logo"> <!-- Replace with your logo path -->
+                <img src="<%= request.getContextPath() %>/image/create-logo.png" alt="Logo">
             </div>
             <div class="title">Login</div>
+            <!-- Role Selection Section -->
             <div class="role-selection">
                 <div class="role-selection-title">Choose your role</div>
                 <label>
-                    <input type="radio" name="role" value="buyer" onclick="window.location.href='login-buyer.jsp'"> Buyer
+                    <input type="radio" name="role" value="buyer" onclick="window.location.href='<%= request.getContextPath() %>/views/login-buyer.jsp'"> Buyer
                 </label>
                 <label>
-                    <input type="radio" name="role" value="farmer" checked> Farmer
+                    <input type="radio" name="role" value="farmer" checked onclick="clearErrorMessage();"> Farmer
                 </label>
             </div>
-            <!-- Updated form to work with the servlet -->
+            <!-- Display Error Message -->
+            <%
+                String errorMessage = (String) request.getAttribute("errorMessage");
+                if (errorMessage != null) {
+            %>
+                <p class="error-message"><%= errorMessage %></p>
+            <%
+                }
+            %>
+            <!-- Login Form -->
             <form action="<%= request.getContextPath() %>/loginfarmer" method="post">
                 <div class="input-group">
                     <label for="phone">Phone no</label>
-                    <input type="text" id="phone" name="phone" required>
+                    <input type="text" id="phone" name="phone" autocomplete="off"
+                           value="<%= (request.getAttribute("errorMessage") != null) ? request.getAttribute("enteredPhone") : "" %>" required>
                 </div>
                 <div class="input-group">
                     <label for="password">Password</label>
-                    <input type="password" id="password" name="password" required>
+                    <input type="password" id="password" name="password" autocomplete="new-password"
+                           value="<%= (request.getAttribute("errorMessage") != null) ? request.getAttribute("enteredPassword") : "" %>" required>
                 </div>
                 <button class="button" type="submit">Login</button>
             </form>
             <div class="link">
-                Don't have an account? <a href="create-farmer.jsp">Signup</a>
+                Don't have an account? <a href="<%= request.getContextPath() %>/views/create-farmer.jsp">Signup</a>
             </div>
         </div>
     </div>

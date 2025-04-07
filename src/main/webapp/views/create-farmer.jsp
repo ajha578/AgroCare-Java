@@ -1,4 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%
+    response.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0");
+    response.setHeader("Pragma", "no-cache");
+    response.setHeader("Expires", "0");
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,8 +26,8 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         .left-panel {
-            background-image: url('../image/create.png'); /* Replace with your image path */
-            background-size: 150%; /* Zoom out the image */
+            background-image: url('<%= request.getContextPath() %>/image/create.png');
+            background-size: 150%;
             background-position: center;
             width: 300px;
             border-top-left-radius: 5px;
@@ -33,57 +38,57 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            width: 300px; /* Adjust the width as needed */
+            width: 300px;
         }
         .logo {
             text-align: center;
             margin-bottom: 20px;
         }
         .logo img {
-            max-width: 100px; /* Adjust logo size as needed */
+            max-width: 100px;
         }
         .title {
             font-size: 24px;
-            margin-bottom: 10px; /* Reduced margin to fit the additional text */
+            margin-bottom: 10px;
             text-align: center;
         }
         .sub-title {
             font-size: 16px;
             margin-bottom: 20px;
             text-align: center;
-            color: #555; /* Optional: Add a subtle color for the sub-title */
+            color: #555;
         }
         .role-selection {
             margin-bottom: 15px;
             text-align: center;
         }
         .input-group {
-            margin-bottom: 20px; /* Increased space between input groups */
+            margin-bottom: 20px;
         }
         .input-group label {
             display: block;
             margin-bottom: 5px;
         }
         .input-group input {
-            width: 90%; /* Decreased size of the textboxes */
+            width: 90%;
             padding: 8px;
             margin-bottom: 10px;
             border: 1px solid #ccc;
-            border-radius: 10px; /* Added border-radius */
-            background-color: #d3d3d3; /* Grey color for the textboxes */
-            margin: 0 auto; /* Center the textboxes */
+            border-radius: 10px;
+            background-color: #d3d3d3;
+            margin: 0 auto;
         }
         .button {
-            width: 80%; /* Decreased button size */
+            width: 80%;
             padding: 12px;
-            background-color: #B08B12; /* Darker button color */
-            color: black; /* Changed text color to black */
+            background-color: #B08B12;
+            color: black;
             border: none;
-            border-radius: 30px; /* Added more border-radius */
+            border-radius: 30px;
             cursor: pointer;
-            font-size: 16px; /* Increased font size */
-            font-weight: bold; /* Bold font */
-            margin: 0 auto; /* Center the button */
+            font-size: 16px;
+            font-weight: bold;
+            margin: 0 auto;
         }
         .button:hover {
             background-color: #8A6811;
@@ -91,27 +96,21 @@
         .link {
             margin-top: 10px;
             text-align: center;
-            color: black; /* Changed to black */
-            font-weight: normal; /* Normal font */
+            color: black;
         }
         .link a {
-            color: black; /* Ensure link color matches */
+            color: black;
             text-decoration: none;
-            font-weight: bold; /* Login in bold */
+            font-weight: bold;
         }
     </style>
     <script>
-        function validateForm() {
-            const name = document.getElementById('name').value;
-            const phone = document.getElementById('phone').value;
-            const password = document.getElementById('password').value;
-
-            if (!name || !phone || !password) {
-                alert('All fields are required!');
-                return false;
-            }
-            return true;
-        }
+        // Clear form fields on page load
+        window.onload = function() {
+            document.getElementById('name').value = '';
+            document.getElementById('phone').value = '';
+            document.getElementById('password').value = '';
+        };
     </script>
 </head>
 <body>
@@ -119,35 +118,45 @@
         <div class="left-panel"></div>
         <div class="right-panel">
             <div class="logo">
-                <img src="../image/create-logo.png" alt="Logo"> <!-- Replace with your logo path -->
+                <img src="<%= request.getContextPath() %>/image/create-logo.png" alt="Logo">
             </div>
             <div class="title">Create an account</div>
             <div class="sub-title">Choose your role below</div>
             <div class="role-selection">
                 <label>
-                    <input type="radio" name="role" value="buyer" onclick="window.location.href='create-buyer.jsp'"> Buyer
+                    <input type="radio" name="role" value="buyer" onclick="window.location.href='<%= request.getContextPath() %>/views/create-buyer.jsp'"> Buyer
                 </label>
                 <label>
                     <input type="radio" name="role" value="farmer" checked> Farmer
                 </label>
             </div>
-            <form action="<%= request.getContextPath() %>/Registerfarmer" method="post" onsubmit="return validateForm()">
+
+            <!-- Display error message if available -->
+            <% 
+                String errorMessage = (String) request.getAttribute("errorMessage");
+                if (errorMessage != null) {
+            %>
+                <div style="color: red; text-align: center;"><%= errorMessage %></div>
+            <% } %>
+
+            <form action="<%= request.getContextPath() %>/Registerfarmer" method="post" autocomplete="off">
                 <div class="input-group">
                     <label for="name">Name</label>
-                    <input type="text" id="name" name="name">
+                    <input type="text" id="name" name="name" value="" autocomplete="new-name">
                 </div>
                 <div class="input-group">
                     <label for="phone">Phone Number</label>
-                    <input type="text" id="phone" name="phone">
+                    <input type="text" id="phone" name="phone" value="" autocomplete="new-phone">
                 </div>
                 <div class="input-group">
                     <label for="password">Password</label>
-                    <input type="password" id="password" name="password">
+                    <input type="password" id="password" name="password" value="" autocomplete="new-password">
                 </div>
                 <button class="button" type="submit">Create Account</button>
             </form>
+
             <div class="link">
-                Already have an account? <a href="login-farmer.jsp">Login</a>
+                Already have an account? <a href="<%= request.getContextPath() %>/views/login-farmer.jsp">Login</a>
             </div>
         </div>
     </div>

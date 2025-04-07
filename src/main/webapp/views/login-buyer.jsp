@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,8 +21,8 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         .left-panel {
-            background-image: url('../image/create.png'); /* Replace with your image path */
-            background-size: 150%; /* Zoom out the image */
+            background-image: url('<%= request.getContextPath() %>/image/create.png'); /* Dynamic path */
+            background-size: 150%;
             background-position: center;
             width: 300px;
             border-top-left-radius: 5px;
@@ -33,18 +33,18 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            width: 300px; /* Adjust the width as needed */
+            width: 300px;
         }
         .logo {
             text-align: center;
             margin-bottom: 20px;
         }
         .logo img {
-            max-width: 100px; /* Adjust logo size as needed */
+            max-width: 100px;
         }
         .title {
             font-size: 24px;
-            margin-bottom: 10px; /* Reduced margin to fit the additional text */
+            margin-bottom: 10px;
             text-align: center;
         }
         .role-selection {
@@ -63,24 +63,24 @@
             margin-bottom: 5px;
         }
         .input-group input {
-            width: 90%; /* Decreased size of the textboxes */
+            width: 90%;
             padding: 8px;
             margin-bottom: 10px;
             border: 1px solid #ccc;
-            border-radius: 10px; /* Added border-radius */
-            background-color: #d3d3d3; /* Grey color for the textboxes */
+            border-radius: 10px;
+            background-color: #d3d3d3;
         }
         .button {
-            width: 80%; /* Decreased button size */
+            width: 80%;
             padding: 12px;
-            background-color: #B08B12; /* Darker button color */
-            color: black; /* Changed text color to black */
+            background-color: #B08B12;
+            color: black;
             border: none;
-            border-radius: 30px; /* Added more border-radius */
+            border-radius: 30px;
             cursor: pointer;
-            font-size: 16px; /* Increased font size */
-            font-weight: bold; /* Bold font */
-            margin: 0 auto; /* Center the button */
+            font-size: 16px;
+            font-weight: bold;
+            margin: 0 auto;
         }
         .button:hover {
             background-color: #8A6811;
@@ -88,13 +88,19 @@
         .link {
             margin-top: 10px;
             text-align: center;
-            color: black; /* Changed to black */
-            font-weight: normal; /* Normal font */
+            color: black;
+            font-weight: normal;
         }
         .link a {
-            color: black; /* Ensure link color matches */
+            color: black;
             text-decoration: none;
-            font-weight: bold; /* Signup in bold */
+            font-weight: bold;
+        }
+        .error-message {
+            color: red;
+            text-align: center;
+            margin-bottom: 10px;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -103,7 +109,7 @@
         <div class="left-panel"></div>
         <div class="right-panel">
             <div class="logo">
-                <img src="../image/create-logo.png" alt="Logo"> <!-- Replace with your logo path -->
+                <img src="<%= request.getContextPath() %>/image/create-logo.png" alt="Logo"> <!-- Dynamic path -->
             </div>
             <div class="title">Login</div>
             <div class="role-selection">
@@ -112,17 +118,28 @@
                     <input type="radio" name="role" value="buyer" checked> Buyer
                 </label>
                 <label>
-                    <input type="radio" name="role" value="farmer" onclick="window.location.href='login-farmer.jsp'"> Farmer
+                    <input type="radio" name="role" value="farmer" onclick="window.location.href='<%= request.getContextPath() %>/views/login-farmer.jsp'"> Farmer
                 </label>
             </div>
-            <!-- Updated form -->
+            <!-- Display Error Message -->
+            <%
+                String errorMessage = (String) request.getAttribute("errorMessage");
+                if (errorMessage != null) {
+            %>
+                <p class="error-message"><%= errorMessage %></p>
+            <%
+                }
+            %>
+            <!-- Login Form -->
             <form action="<%= request.getContextPath() %>/LoginServlet" method="post">
                 <div class="input-group">
                     <label for="email">Email</label>
-                    <input type="email" id="email" name="email" required>
+                    <input type="email" id="email" name="email" autocomplete="off"
+                           value="<%= (request.getAttribute("errorMessage") != null) ? request.getAttribute("enteredEmail") : "" %>" required>
 
                     <label for="password">Password</label>
-                    <input type="password" id="password" name="password" required>
+                    <input type="password" id="password" name="password" autocomplete="new-password"
+                           value="<%= (request.getAttribute("errorMessage") != null) ? request.getAttribute("enteredPassword") : "" %>" required>
                 </div>
                 <button class="button" type="submit">Login</button>
             </form>
