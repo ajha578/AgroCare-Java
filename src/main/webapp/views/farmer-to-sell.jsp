@@ -1,3 +1,4 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,23 +11,23 @@
             margin: 0;
             padding: 0;
             display: flex;
-            min-height: 100vh; /* Ensure the body takes up full height of the viewport */
-            background-color: #f0f0d8; /* Background of the homepage */
+            min-height: 100vh;
+            background-color: #f0f0d8;
         }
         .sidebar {
             width: 200px;
-            background-color: #f0f0d8; /* Same background as the homepage */
+            background-color: #f0f0d8;
             padding: 20px;
             box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-            border-top-right-radius: 30px; /* Radius only on the right side */
-            border-bottom-right-radius: 10px; /* Radius only on the right side */
+            border-top-right-radius: 30px;
+            border-bottom-right-radius: 10px;
             display: flex;
             flex-direction: column;
-            align-items: center; /* Center the content */
-            height: 100vh; /* Ensure the sidebar takes up full height */
+            align-items: center;
+            height: 100vh;
         }
         .sidebar img {
-            max-width: 120px; /* Increased logo size */
+            max-width: 120px;
             margin-bottom: 10px;
         }
         .sidebar h2 {
@@ -36,28 +37,28 @@
         .sidebar ul {
             list-style: none;
             padding: 0;
-            width: 100%; /* Ensure the icons and text align properly */
-            margin-top: 20px; /* Move links a little down */
+            width: 100%;
+            margin-top: 20px;
         }
         .sidebar ul li {
             margin-bottom: 20px;
             display: flex;
             align-items: center;
-            justify-content: flex-start; /* Align items to the left */
-            transition: transform 0.3s ease-in-out; /* Smooth transition */
+            justify-content: flex-start;
+            transition: transform 0.3s ease-in-out;
         }
         .sidebar ul li:hover {
-            transform: scale(1.05); /* Scale up the list item when hovered */
+            transform: scale(1.05);
         }
         .sidebar ul li img {
-            margin-right: 10px; /* Space between icon and text */
+            margin-right: 10px;
             width: 25px;
             height: 25px;
         }
         .sidebar ul li a {
             text-decoration: none;
             color: #333;
-            font-size: 18px; /* Increased font size */
+            font-size: 18px;
         }
         .main-content {
             flex-grow: 1;
@@ -67,7 +68,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 10px; /* Move header closer to the top */
+            margin-bottom: 10px;
         }
         .header h1 {
             font-size: 50px;
@@ -86,22 +87,22 @@
             color: #333;
         }
         .card {
-            width: 80%; /* Full width */
+            width: 80%;
             background-color: #fff;
             padding: 20px;
-            border-radius: 30px; /* Border radius */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Added box shadow */
-            transition: transform 0.3s ease-in-out; /* Smooth transition */
+            border-radius: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease-in-out;
             margin-bottom: 20px;
-            margin-top: 10px; /* Move card up */
-            position: relative; /* Ensure absolute positioning works */
-            display: flex; /* Use flexbox to align items */
-            flex-direction: column; /* Column layout */
-            margin-left:20px;
+            margin-top: 10px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            margin-left: 20px;
         }
         .content-container {
             display: flex;
-            align-items: flex-start; /* Align items vertically to the top */
+            align-items: flex-start;
             width: 100%;
         }
         .image-container {
@@ -109,18 +110,16 @@
             margin-right: 20px;
         }
         .image-container img {
-            width: 250px; /* Increased width for the image */
+            width: 150px;
             border-radius: 10px;
         }
-        .image-container img.icon {
-            width: 30px; /* Size of the icon */
-            height: 30px;
+        .image-container input[type="file"] {
             position: absolute;
             top: 10px;
-            right: 10px; /* Position at the top right corner of the image */
+            right: 10px;
         }
         .content {
-            flex-grow: 1; /* Allow content to take up remaining space */
+            flex-grow: 1;
         }
         .description-card {
             background-color: #f0f0f0;
@@ -129,9 +128,17 @@
             margin-top: 20px;
             width: 60%;
         }
-        .card h2 {
-            text-align: center; /* Center the heading */
+        .description-card input {
+            background-color: #f0f0f0;
+            border: none;
+            border-radius: 10px;
+            padding: 10px;
+            font-size: 14px;
             width: 100%;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .description-card input:focus {
+            outline: none;
         }
         .additional-cards {
             display: flex;
@@ -143,21 +150,29 @@
             background-color: #f0f0f0;
             padding: 15px;
             border-radius: 10px;
-            width: 20%; /* 20% width for each additional card */
-            margin-right: 10px; /* Add space between the cards */
-        }
-        .additional-card:last-child {
-            margin-right: 0; /* Remove margin on the last card */
-        }
-        .additional-card img {
-            width: 25px; /* Size of the icon */
-            height: 25px;
+            width: 20%;
             margin-right: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .additional-card input {
+            background-color: #f0f0f0;
+            border: none;
+            border-radius: 10px;
+            padding: 10px;
+            font-size: 14px;
+            width: 100%;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .additional-card input:focus {
+            outline: none;
         }
         .buttons {
             display: flex;
-            justify-content: flex-start; /* Align buttons to the left */
-            margin-top: 10px; /* Move buttons closer to the main card */
+            justify-content: flex-start;
+            margin-top: 10px;
         }
         .button {
             padding: 10px 20px;
@@ -165,7 +180,7 @@
             border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
-            margin-right: 220px; /* Space between buttons */
+            margin-right: 220px;
         }
         .button.done {
             background-color: #28a745;
@@ -175,19 +190,19 @@
             background-color: #ff4c4c;
             color: white;
         }
-        
     </style>
 </head>
 <body>
     <div class="sidebar">
-        <img src="../image/dash-logo.png" alt="Logo"> <!-- Replace with your logo path -->
+        <img src="../image/dash-logo.png" alt="Logo">
         <h2>AgriCare</h2>
         <ul>
-            <li><img src="../image/dashboard-icon.png" alt="Dashboard Icon"><a href="#dashboard">Dashboard</a></li> <!-- Replace with your icons -->
-            <li><img src="../image/setting-icon.png" alt="Setting Icon"><a href="farmer-setting.jsp">Setting</a></li> <!-- Update the URL here -->
+            <li><img src="../image/dashboard-icon.png" alt="Dashboard Icon"><a href="#dashboard">Dashboard</a></li>
+            <li><img src="../image/setting-icon.png" alt="Setting Icon"><a href="farmer-setting.jsp">Setting</a></li>
             <li><img src="../image/History-icon.png" alt="History Icon"><a href="farmer-history.jsp">History</a></li>
         </ul>
     </div>
+
     <div class="main-content">
         <div class="header">
             <h1>Agriculture & Organic Market</h1>
@@ -196,35 +211,55 @@
                 <span>Mukesh Kumar</span>
             </div>
         </div>
-        <div class="card">
-            <h2>Sell Your Product</h2>
-            <div class="content-container">
-                <div class="image-container">
-                    <img src="../image/onion.png" alt="Onion"> <!-- Replace with your image path -->
-                    <img src="../image/cut-icon.png" alt="Icon" class="icon"> <!-- Replace with your icon path -->
-                </div>
-                <div class="content">
-                    <!-- Additional content goes here -->
-                </div>
+
+        <!-- ✅ Product Upload Form -->
+        <form action="../FarmerToSell" method="post" enctype="multipart/form-data">
+    <div class="card">
+        <h2>Sell Your Product</h2>
+        <div class="content-container">
+            <div class="image-container">
+                <img src="../image/product-upload-icon.png" alt="Product Image">
+                <input type="file" name="image" accept="image/*" required>
             </div>
-            <div class="description-card">
-                <!-- Another card below the image -->
-                <p>Providing fresh and high-quality onions directly from my fields to your hand. These onions are grown with care, ensuring their natural flavor and nutritional value remain intact.</p>
-            </div>
-            <div class="additional-cards">
-                <div class="additional-card">
-                    <img src="../image/camera.png" alt="About Icon"> <!-- Replace with your icon path -->
-                    <span>About (optional)</span>
-                </div>
-                <div class="additional-card">
-                    <span>Rs.40 About (KG)</span>
-                </div>
+            <div class="content">
+                <!-- Future use -->
             </div>
         </div>
-        <div class="buttons">
-            <button class="button done">Done</button>
-            <button class="button back" onclick="window.location.href='dashboard.jsp'">Back</button>
+
+        <!-- Product Name Textbox -->
+        <div class="description-card">
+            <input type="text" name="productName" placeholder="Product Name" required>
         </div>
+
+        <!-- Description Textbox -->
+        <div class="description-card">
+            <input type="text" name="description" placeholder="Write the description of the product" required>
+        </div>
+
+        <div class="additional-cards">
+            <div class="additional-card">
+                <input type="number" name="price" placeholder="Price" required>
+            </div>
+        </div>
+
+        <!-- Radio buttons for categories in a horizontal card -->
+        <div class="additional-cards">
+            <div class="additional-card" style="display: flex; justify-content: space-around; align-items: center; padding: 15px; background-color: #f0f0f0; border-radius: 10px;">
+                <label><input type="radio" name="category" value="Fruits" required> Fruits</label>
+                <label><input type="radio" name="category" value="Vegetables" required> Vegetables</label>
+                <label><input type="radio" name="category" value="Cereals" required> Cereals</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="buttons">
+        <button type="submit" class="button done">Done</button>
+        <button type="button" class="button back" onclick="window.location.href='dashboard.jsp'">Back</button>
+    </div>
+</form>
+
+
+
     </div>
 </body>
 </html>

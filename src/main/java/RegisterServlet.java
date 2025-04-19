@@ -30,7 +30,7 @@ public class RegisterServlet extends HttpServlet {
         // Database connection parameters
         String jdbcURL = "jdbc:mysql://localhost:3306/project";
         String jdbcUsername = "root";
-        String jdbcPassword = "";
+        String jdbcPassword = "aditya3306";
 
         Connection connection = null;
         PreparedStatement preparedStatement = null;

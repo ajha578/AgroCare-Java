@@ -1,100 +1,110 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
-<%@ page pageEncoding="UTF-8" %>
+<%@ page import="java.sql.*" %>
+<%@ page session="true" %>
+<%
+    String profileName = "", status = "", aboutMe = "", profilePic = "../image/profile-icon.png";
+    int buyerId = 1; // Replace this with session logic in production
+
+    try {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/project", "root", "aditya3306");
+        PreparedStatement ps = con.prepareStatement("SELECT * FROM buyer_profile WHERE buyer_id = ?");
+        ps.setInt(1, buyerId);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            profileName = rs.getString("profile_name");
+            status = rs.getString("status");
+            aboutMe = rs.getString("about_me");
+            profilePic = rs.getString("profile_pic") != null ? rs.getString("profile_pic") : profilePic;
+        }
+        rs.close();
+        ps.close();
+        con.close();
+    } catch(Exception e) {
+        e.printStackTrace();
+    }
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AgriCare Settings</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
             display: flex;
-            min-height: 100vh; /* Ensure the body takes up full height of the viewport */
-            background-color: #f0f0d8; /* Background of the homepage */
+            min-height: 100vh;
+            background-color: #f0f0d8;
         }
         .sidebar {
             width: 200px;
-            background-color: #f0f0d8; /* Same background as the homepage */
+            background-color: #f0f0d8;
             padding: 20px;
             box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-            border-radius: 30px 30px 0 0; /* Radius on the top left and top right sides */
+            border-radius: 30px 30px 0 0;
             display: flex;
             flex-direction: column;
-            align-items: center; /* Center the content */
-            height: 100vh; /* Ensure the sidebar takes up full height */
+            align-items: center;
+            height: 100vh;
         }
         .sidebar img {
-            max-width: 120px; /* Increased logo size */
+            max-width: 120px;
             margin-bottom: 10px;
         }
         .sidebar h2 {
             font-size: 18px;
             margin-bottom: 40px;
-            text-align: center; /* Center AgriCare */
+            text-align: center;
         }
         .sidebar ul {
             list-style: none;
             padding: 0;
-            width: 100%; /* Ensure the icons and text align properly */
-            margin-top: 20px; /* Move links a little down */
+            width: 100%;
+            margin-top: 20px;
         }
         .sidebar ul li {
             margin-bottom: 20px;
             display: flex;
             align-items: center;
-            justify-content: center; /* Center the list items */
-            transition: transform 0.3s ease-in-out; /* Smooth transition for list items */
+            justify-content: center;
+            transition: transform 0.3s ease-in-out;
         }
         .sidebar ul li:hover {
-            transform: scale(1.05); /* Scale up the list item when hovered */
+            transform: scale(1.05);
         }
         .sidebar ul li img {
-            margin-right: 10px; /* Space between icon and text */
+            margin-right: 10px;
             width: 25px;
             height: 25px;
         }
         .sidebar ul li a {
             text-decoration: none;
             color: #333;
-            font-size: 18px; /* Increased font size */
+            font-size: 18px;
         }
         .sidebar ul li a[href="#Setting"] {
-            color: #ff9900; /* Change color of "Setting" link */
-        }
-        .sidebar ul li a[href="#Setting"] + img {
-            filter: brightness(0) saturate(100%) invert(47%) sepia(100%) saturate(353%) hue-rotate(343deg) brightness(98%) contrast(91%); /* Change color of "Setting" logo */
+            color: #ff9900;
         }
         .main-content {
             flex-grow: 1;
             padding: 20px;
         }
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
         .header h1 {
             font-size: 50px;
             color: #ff9900;
-        }
-        .header .profile {
-            display: flex;
-            align-items: center;
-        }
-        .header .profile img {
-            border-radius: 50%;
-            margin-right: 10px;
-        }
-        .header .profile span {
-            font-size: 16px;
-            color: #333;
+            margin-bottom: 30px;
         }
         .profile-picture {
-            margin-bottom: 20px; /* Add space below the profile picture section */
+            margin-bottom: 30px;
+        }
+        .profile-picture img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            cursor: pointer;
         }
         .form-group {
             margin-bottom: 20px;
@@ -108,27 +118,9 @@
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
-            margin-bottom: 20px; /* Add space between text boxes */
         }
         .form-group textarea {
             resize: vertical;
-        }
-        .profile-buttons {
-            display: flex;
-            gap: 30px; /* Increase space between buttons */
-            margin-top: 10px; /* Add space between profile icon and buttons */
-        }
-        .change-btn {
-            background-color: #009DFF; /* Background color for Change Picture button */
-            color: white; /* Text color for Change Picture button */
-            border-radius: 5px; /* Border radius for Change Picture button */
-            padding: 10px 20px;
-        }
-        .delete-btn {
-            background-color: red; /* Background color for Delete Picture button */
-            color: white; /* Text color for Delete Picture button */
-            border-radius: 5px; /* Border radius for Delete Picture button */
-            padding: 10px 20px;
         }
         .save-btn {
             background-color: #28a745;
@@ -136,7 +128,7 @@
             padding: 10px 20px;
             border: none;
             cursor: pointer;
-            border-radius: 10px; /* Add radius to Save Changes button */
+            border-radius: 10px;
         }
         .logout-btn {
             background-color: #dc3545;
@@ -144,47 +136,61 @@
             padding: 10px 20px;
             border: none;
             cursor: pointer;
-            border-radius: 10px; /* Add radius to Logout button */
-            float: right;
+            border-radius: 10px;
+            margin-left: 20px;
         }
     </style>
 </head>
 <body>
     <div class="sidebar">
-        <img src="../image/dash-logo.png" alt="Logo"> <!-- Replace with your logo path -->
+        <img src="../image/dash-logo.png" alt="Logo">
         <h2>AgriCare</h2>
         <ul>
-            <li><img src="../image/dashboard-logo.png" alt="Dashboard Icon"><a href="dashboard-buyer-fruit.jsp	">Dashboard</a></li> <!-- Replace with your icons -->
+            <li><img src="../image/dashboard-logo.png" alt="Dashboard Icon"><a href="dashboard-buyer-fruit.jsp">Dashboard</a></li>
             <li><img src="../image/setting-logo.png" alt="Setting Icon"><a href="#Setting">Setting</a></li>
-            <li><img src="../image/History-icon.png" alt="History Icon"><a href="#">History</a></li>
+            <li><img src="../image/History-icon.png" alt="History Icon"><a href="buyer-history.jsp">History</a></li>
         </ul>
     </div>
     <div class="main-content">
         <div class="header">
             <h1>Agriculture & Farmers Market</h1>
         </div>
-        <div class="profile-picture">
-            <h3>Profile Picture</h3>
-            <img src="../image/profile-icon.png" alt="Profile Picture">
-            <div class="profile-buttons">
-                <button class="change-btn">Change picture</button>
-                <button class="delete-btn">Delete picture</button>
+
+        <form action="../UpdateBuyerProfile" method="post" enctype="multipart/form-data">
+            <div class="profile-picture">
+                <h3>Profile Picture</h3>
+                <label for="fileInput">
+                    <img src="<%= profilePic %>" alt="Profile Picture" id="profile-preview">
+                </label>
+                <input type="file" id="fileInput" name="profilePic" style="display: none;" onchange="previewImage(event)">
             </div>
-        </div>
-        <div class="form-group">
-            <label for="profile-name">Profile name</label>
-            <input type="text" id="profile-name" value="Abhi Sharma">
-        </div>
-        <div class="form-group">
-            <label for="status">Status</label>
-            <input type="text" id="status" value="Buyer">
-        </div>
-        <div class="form-group">
-            <label for="about-me">About me</label>
-            <textarea id="about-me" rows="4">I am a buyer at AgriCare, and this platform allows me to purchase fresh and high-quality fruits, vegetables, pulses, wheat, and rice directly from farmers.</textarea>
-        </div>
-        <button class="save-btn">Save changes</button>
-        <button class="logout-btn"><a href="create-buyer.jsp">Logout</a></button>
+
+            <div class="form-group">
+                <label for="profile-name">Profile name</label>
+                <input type="text" id="profile-name" name="profileName" value="<%= profileName %>">
+            </div>
+            <div class="form-group">
+                <label for="status">Status</label>
+                <input type="text" id="status" name="status" value="<%= status %>">
+            </div>
+            <div class="form-group">
+                <label for="about-me">About me</label>
+                <textarea id="about-me" name="aboutMe" rows="4"><%= aboutMe %></textarea>
+            </div>
+
+            <button type="submit" class="save-btn">Save changes</button>
+            <button class="logout-btn"><a href="create-farmer.jsp" style="color: white; text-decoration: none;">Logout</a></button>
+        </form>
     </div>
+
+    <script>
+        function previewImage(event) {
+            const reader = new FileReader();
+            reader.onload = function () {
+                document.getElementById('profile-preview').src = reader.result;
+            }
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    </script>
 </body>
 </html>

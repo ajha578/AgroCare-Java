@@ -16,7 +16,7 @@ import jakarta.servlet.http.HttpServletResponse;
 public class Registerfarmer extends HttpServlet {
     private static final String DB_URL = "jdbc:mysql://localhost:3306/project?useSSL=false&serverTimezone=UTC";
     private static final String DB_USER = "root";
-    private static final String DB_PASSWORD = "";
+    private static final String DB_PASSWORD = "aditya3306";
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

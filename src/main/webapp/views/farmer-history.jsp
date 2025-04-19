@@ -1,82 +1,66 @@
+<%@ page import="model.Product, model.ProductDAO, java.util.List" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AgriCare Settings</title>
+    <title>AgriCare Farmer History</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
-            padding: 0;
             display: flex;
-            min-height: 100vh; /* Ensure the body takes up full height of the viewport */
-            background-color: #f0f0d8; /* Background of the homepage */
+            background-color: #f0f0d8;
         }
         .sidebar {
             width: 200px;
-            background-color: #f0f0d8; /* Same background as the homepage */
+            background-color: #f0f0d8;
             padding: 20px;
+            height: 100vh;
             box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-            border-radius: 30px 30px 0 0; /* Radius on the top left and top right sides */
-            display: flex;
-            flex-direction: column;
-            align-items: center; /* Center the content */
-            height: 100vh; /* Ensure the sidebar takes up full height */
         }
         .sidebar img {
-            max-width: 120px; /* Increased logo size */
+            max-width: 120px;
             margin-bottom: 10px;
         }
         .sidebar h2 {
             font-size: 18px;
             margin-bottom: 40px;
-            text-align: center; /* Center AgriCare */
+            text-align: center;
         }
         .sidebar ul {
             list-style: none;
             padding: 0;
-            width: 100%; /* Ensure the icons and text align properly */
-            margin-top: 20px; /* Move links a little down */
         }
         .sidebar ul li {
             margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center; /* Center the list items */
-            transition: transform 0.3s ease-in-out; /* Smooth transition for list items */
-        }
-        .sidebar ul li:hover {
-            transform: scale(1.05); /* Scale up the list item when hovered */
+            text-align: center;
         }
         .sidebar ul li img {
-            margin-right: 10px; /* Space between icon and text */
             width: 25px;
-            height: 25px;
+            vertical-align: middle;
+            margin-right: 10px;
         }
         .sidebar ul li a {
             text-decoration: none;
             color: #333;
-            font-size: 18px; /* Increased font size */
+            font-size: 18px;
         }
         .sidebar ul li a[href="#History"] {
-            color: #ff9900; /* Change color of "History" link */
+            color: #ff9900;
         }
-        .sidebar ul li a[href="#History"] + img {
-            filter: brightness(0) saturate(100%) invert(47%) sepia(100%) saturate(353%) hue-rotate(343deg) brightness(98%) contrast(91%); /* Change color of "History" logo */
-        }
+
         .main-content {
             flex-grow: 1;
-            padding: 20px;
+            padding: 30px;
         }
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
         }
         .header h1 {
-            font-size: 50px;
+            font-size: 40px;
             color: #ff9900;
         }
         .profile {
@@ -93,33 +77,45 @@
             font-size: 18px;
             color: #333;
         }
-        .card {
-            background-color: #ffffff;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-        }
-        .card img {
-            max-width: 180px;
-            margin-right: 20px;
-        }
-        .card-content {
+        .card-container {
+            margin-top: 30px;
             display: flex;
             flex-direction: column;
+            gap: 20px;
         }
-        .card-content h2 {
+        .card {
+            background-color: #ffffff;
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        .card:hover {
+            transform: scale(1.02);
+        }
+        .card img {
+            width: 130px;
+            height: auto;
+            margin-right: 20px;
+            border-radius: 8px;
+        }
+        .card-details {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .card-details h2 {
             margin: 0;
-            font-size: 24px;
+            font-size: 22px;
             color: #ff9900;
         }
-        .card-content p {
+        .card-details p {
             margin: 5px 0;
-            font-size: 18px;
+            font-size: 16px;
         }
-        .card-content .status {
+        .status {
             color: green;
             font-weight: bold;
         }
@@ -127,29 +123,38 @@
 </head>
 <body>
     <div class="sidebar">
-        <img src="../image/dash-logo.png" alt="Logo"> <!-- Replace with your logo path -->
+        <img src="../image/dash-logo.png" alt="Logo">
         <h2>AgriCare</h2>
         <ul>
-            <li><img src="../image/dashboard-logo.png" alt="Dashboard Icon"><a href="dashboard.jsp">Dashboard</a></li> <!-- Replace with your icons -->
-            <li><img src="../image/setting-icon.png" alt="Setting Icon"><a href="farmer-setting.jsp">Setting</a></li>
-            <li><img src="../image/History-icon.png" alt="History Icon"><a href="#History">History</a></li>
+            <li><img src="../image/dashboard-logo.png"><a href="dashboard.jsp">Dashboard</a></li>
+            <li><img src="../image/setting-icon.png"><a href="farmer-setting.jsp">Setting</a></li>
+            <li><img src="../image/History-icon.png"><a href="#History">History</a></li>
         </ul>
     </div>
+
     <div class="main-content">
         <div class="header">
-            <h1>Agriculture & Farmers Market</h1>
+            <h1>Farmer's Market History</h1>
             <div class="profile">
-                <img src="../image/profile-icon.png" alt="Profile Icon"> <!-- Replace with your profile icon path -->
+                <img src="../image/profile-icon.png" alt="Profile">
                 <span>Mukesh Kumar</span>
             </div>
         </div>
-        <div class="card">
-            <img src="../image/onion.png" alt="Onion"> <!-- Replace with your onion image path -->
-            <div class="card-content">
-                <h2>Onion</h2>
-                <p>To Sell</p>
-                <p class="status">Status: Active</p>
+
+        <div class="card-container">
+            <%
+                List<Product> products = ProductDAO.getAllProducts();
+                for (Product p : products) {
+            %>
+            <div class="card">
+                <img src="<%= p.getImagePath() %>" alt="<%= p.getName() %>">
+                <div class="card-details">
+                    <h2><%= p.getName() %></h2>
+                    <p>Price: ₹<%= p.getPrice() %></p>
+                    <p class="status">Status: Active</p>
+                </div>
             </div>
+            <% } %>
         </div>
     </div>
 </body>

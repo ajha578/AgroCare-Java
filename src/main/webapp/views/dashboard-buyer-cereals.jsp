@@ -1,3 +1,10 @@
+<%@ page import="model.ProductDAO,model.Product" %>
+<%@ page import="java.util.List" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%
+    ProductDAO dao = new ProductDAO();
+    List<Product> cerealProducts = dao.getProductsByCategory("Cereals");
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -167,48 +174,74 @@
         .filter-container label {
             margin-right: 20px;
         }
-        #btn{
-       
+        #btn {
             background-color: green; /* Green background color */
             color: white; /* White text color */
             border: none;
             padding: 15px 80px; /* Increased button size */
             border-radius: 40px;
             cursor: pointer;
-            transition: transform 0.3s 
-        
+            transition: transform 0.3s;
         }
         #btn:hover {
             transform: scale(1.1);
-            }
-            
-         .product-details div {
+        }
+        .product-details div {
             margin-left: 80px; /* Increased space between image and name */
+        }
+        /* Added style for the success message */
+        .success-message {
+            color: green;
+            font-weight: bold;
+            margin-left: 10px;
+            display: none;
         }
     </style>
     <script>
-
     document.addEventListener('DOMContentLoaded', function () {
-        const fruitsRadio = document.querySelector('input[name="category"][value="fruits"]');
-        fruitsRadio.addEventListener('click', function () {
+        document.querySelector('input[value="fruits"]').addEventListener('click', function () {
             window.location.href = 'dashboard-buyer-fruit.jsp';
         });
 
-        const vegetablesRadio = document.querySelector('input[name="category"][value="vegetables"]');
-        vegetablesRadio.addEventListener('click', function () {
+        document.querySelector('input[value="vegetables"]').addEventListener('click', function () {
             window.location.href = 'dashboard-buyer-vegetable.jsp';
+        });
+
+        document.querySelector('input[value="cereals"]').addEventListener('click', function () {
+            window.location.href = 'dashboard-buyer-cereal.jsp';
+        });
+        
+        // Add event listeners to all Buy buttons
+        const buyButtons = document.querySelectorAll('.product-card button');
+        buyButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Create or show success message
+                let message = this.parentElement.querySelector('.success-message');
+                if (!message) {
+                    message = document.createElement('span');
+                    message.className = 'success-message';
+                    message.textContent = 'Added to Cart!';
+                    this.parentElement.appendChild(message);
+                }
+                message.style.display = 'inline';
+                
+                // Hide the message after 2 seconds
+                setTimeout(() => {
+                    message.style.display = 'none';
+                }, 2000);
+            });
         });
     });
     </script>
 </head>
 <body>
     <div class="sidebar">
-        <img src="../image/dash-logo.png" alt="Logo"> <!-- Replace with your logo path -->
+        <img src="../image/dash-logo.png" alt="Logo">
         <h2>AgriCare</h2>
         <ul>
-            <li><img src="../image/dashboard-icon.png" alt="Dashboard Icon"><a href="#">Dashboard</a></li> <!-- Replace with your icons -->
+            <li><img src="../image/dashboard-icon.png" alt="Dashboard Icon"><a href="#">Dashboard</a></li>
             <li><img src="../image/setting-icon.png" alt="Setting Icon"><a href="buyer-setting.jsp">Setting</a></li>
-            <li><img src="../image/History-icon.png" alt="History Icon"><a href="#">History</a></li>
+            <li><img src="../image/History-icon.png" alt="History Icon"><a href="buyer-history.jsp">History</a></li>
         </ul>
     </div>
     <div class="main-content">
@@ -216,54 +249,59 @@
             <h1>Agriculture & Organic Market</h1>
             <div class="profile">
                 <img src="../image/profile-icon.png" alt="Profile Picture" width="40" height="40">
-                <span>Abhi Sharma</span> <!-- Changed name -->
+                <span>Abhi Sharma</span>
             </div>
         </div>
         <div class="card-container">
             <div class="card">
                 <h3>Fresh from the farm to your home!</h3>
                 <div class="filter-container">
-                    <label><input type="radio" name="category" value="fruits" > Fruits</label>
+                    <label><input type="radio" name="category" value="fruits"> Fruits</label>
                     <label><input type="radio" name="category" value="vegetables"> Vegetables</label>
                     <label><input type="radio" name="category" value="cereals" checked> Cereals</label>
                 </div>
                 <div class="product-list">
-                    <div class="product-card">
-                        <div class="product-details">
-                            <img src="../image/rice.png" alt="rice">
-                            <div>
-                                <h4>Rice</h4>
-                                <hr>
-                                <span>Rs 30/kg</span>
+                    <% if (cerealProducts != null && !cerealProducts.isEmpty()) {
+                        for (Product p : cerealProducts) { %>
+                            <div class="product-card">
+                                <div class="product-details">
+                                    <img src="productImages/<%= p.getImagePath() %>" alt="<%= p.getName() %>">
+
+                                    <div>
+                                        <h4><%= p.getName() %></h4>
+                                        <hr>
+                                        <span>Rs <%= p.getPrice() %>/kg</span>
+                                    </div>
+                                </div>
+                                <button id="btn">Buy</button>
                             </div>
-                        </div>
-                        <button id="btn">Buy</button>
-                    </div>
-                    <div class="product-card">
-                        <div class="product-details">
-                            <img src="../image/wheat.png" alt="wheat">
-                            <div>
-                                <h4>Wheat</h4>
-                                <hr>
-                                <span>Rs 40/kg</span>
-                            </div>
-                        </div>
-                        <button id="btn">Buy</button>
-                    </div>
-                    <div class="product-card">
-                        <div class="product-details">
-                            <img src="../image/corn.png" alt="corn">
-                            <div>
-                                <h4>Corn</h>                      
-                                <hr>
-                                <span>Rs 20/kg</span>
-                            </div>
-                        </div>
-                        <button id="btn">Buy</button>
-                    </div>
+                    <%  }
+                    } else { %>
+                        <p>No cereal products available at the moment.</p>
+                    <% } %>
                 </div>
             </div>
         </div>
+        <!-- Go to Cart Button -->
+<!-- Add this right before the closing </div> tag of the main-content div -->
+<div style="margin-top: 30px; text-align: center;">
+    <form action="buyer-cart.jsp">
+        <button type="submit" style="
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 15px 60px;
+            border-radius: 30px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: transform 0.3s ease-in-out;
+        " onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+            Go to Cart
+        </button>
+    </form>
+</div>
+</div>
     </div>
+    
 </body>
 </html>

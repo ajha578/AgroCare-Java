@@ -27,7 +27,7 @@ public class LoginServlet extends HttpServlet {
         // Database connection parameters
         String jdbcURL = "jdbc:mysql://localhost:3306/project"; // Adjust the database name
         String jdbcUsername = "root"; // Default XAMPP username
-        String jdbcPassword = ""; // Default XAMPP password
+        String jdbcPassword = "aditya3306"; // Default XAMPP password
 
         Connection connection = null;
         PreparedStatement preparedStatement = null;

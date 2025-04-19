@@ -1,66 +1,72 @@
+<%@ page import="java.util.*, model.ProductDAO, model.Product" %>
+<%
+    List<Product> vegetableProducts = ProductDAO.getProductsByCategory("vegetables");
+%>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AgriCare dashboard</title>
+    <title>AgriCare dashboard - Vegetables</title>
     <style>
+        /* Your existing styles remain unchanged */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
             display: flex;
-            height: 100vh; /* Ensure the body takes up full height of the viewport */
-            background-color: #f0f0d8; /* Background of the homepage */
+            height: 100vh;
+            background-color: #f0f0d8;
         }
         .sidebar {
             width: 200px;
-            background-color: #f0f0d8; /* Same background as the homepage */
+            background-color: #f0f0d8;
             padding: 20px;
             box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-            border-top-right-radius: 30px; /* Radius only on the right side */
-            border-bottom-right-radius: 10px; /* Radius only on the right side */
+            border-top-right-radius: 30px;
+            border-bottom-right-radius: 10px;
             display: flex;
             flex-direction: column;
-            align-items: center; /* Center the content */
-            height: 100%; /* Ensure the sidebar takes up full height */
+            align-items: center;
+            height: 100%;
         }
         .sidebar img {
-            max-width: 120px; /* Increased logo size */
+            max-width: 120px;
             margin-bottom: 10px;
         }
         .sidebar h2 {
             font-size: 18px;
             margin-bottom: 40px;
-            text-align: center; /* Center AgriCare */
+            text-align: center;
         }
         .sidebar ul {
             list-style: none;
             padding: 0;
-            width: 100%; /* Ensure the icons and text align properly */
-            margin-top: 20px; /* Move links a little down */
+            width: 100%;
+            margin-top: 20px;
         }
         .sidebar ul li {
             margin-bottom: 20px;
             display: flex;
             align-items: center;
-            justify-content: center; /* Center the list items */
+            justify-content: center;
         }
         .sidebar ul li img {
-            margin-right: 10px; /* Space between icon and text */
+            margin-right: 10px;
             width: 25px;
             height: 25px;
         }
         .sidebar ul li a {
             text-decoration: none;
             color: #333;
-            font-size: 18px; /* Increased font size */
+            font-size: 18px;
         }
         .sidebar ul li:nth-child(1) a {
-            color: #ff9900; /* Change the text color of "Dashboard" to the color of its icon */
+            color: #ff9900;
         }
         .sidebar ul li:hover {
-            transform: scale(1.05); /* Scale up the list item when hovered */
+            transform: scale(1.05);
         }
         .main-content {
             flex-grow: 1;
@@ -90,25 +96,25 @@
         }
         .card-container {
             display: flex;
-            justify-content: center; /* Center the card */
+            justify-content: center;
         }
         .card {
-            width: 90%; /* Increased card width */
+            width: 90%;
             background-color: #fff;
             padding: 20px;
-            border-radius: 30px; /* Border radius */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Added box shadow */
+            border-radius: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             text-align: center;
             display: flex;
             flex-direction: column;
             align-items: center;
-            overflow-y: auto; /* Enable vertical scroll */
-            max-height: 500px; /* Fixed height for the main card */
+            overflow-y: auto;
+            max-height: 500px;
         }
         .card h3 {
             font-size: 25px;
             color: #333;
-            margin-top: 20px; /* Align text equally in all cards */
+            margin-top: 20px;
         }
         .product-list {
             width: 100%;
@@ -119,7 +125,7 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
-            background-color: #f0f0f0; /* Light grey background color */
+            background-color: #f0f0f0;
             padding: 10px;
             border-radius: 10px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -132,7 +138,7 @@
             width: 50px;
             height: 50px;
             border-radius: 5px;
-            margin-right: 50px; /* Increased space between image and name */
+            margin-right: 50px;
         }
         .product h4 {
             font-size: 16px;
@@ -150,13 +156,13 @@
             background-color: #28a745;
             color: white;
             border: none;
-            padding: 10px 20px; /* Increased button size */
+            padding: 10px 20px;
             border-radius: 5px;
             cursor: pointer;
-            transition: transform 0.3s ease-in-out; /* Smooth transition for button */
+            transition: transform 0.3s ease-in-out;
         }
         .product button:hover {
-            transform: scale(1.1); /* Scale up the button when hovered */
+            transform: scale(1.1);
         }
         .filter-container {
             display: flex;
@@ -167,44 +173,68 @@
         .filter-container label {
             margin-right: 20px;
         }
-        #btn{
-       
-            background-color: green; /* Green background color */
-            color: white; /* White text color */
+        #btn {
+            background-color: green;
+            color: white;
             border: none;
-            padding: 15px 80px; /* Increased button size */
+            padding: 15px 80px;
             border-radius: 40px;
             cursor: pointer;
-            transition: transform 0.3s 
-        
+            transition: transform 0.3s;
         }
         #btn:hover {
             transform: scale(1.1);
-            }
-            
-         .product-details div {
-            margin-left: 80px; /* Increased space between image and name */
+        }
+        .product-details div {
+            margin-left: 80px;
+        }
+        .success-message {
+            color: green;
+            font-weight: bold;
+            margin-left: 10px;
+            display: none;
         }
     </style>
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const fruitsRadio = document.querySelector('input[name="category"][value="fruits"]');
-            fruitsRadio.addEventListener('click', function () {
-                window.location.href = 'dashboard-buyer-fruit.jsp';
-            });
-            const cerealsRadio = document.querySelector('input[name="category"][value="cereals"]');
-            cerealsRadio.addEventListener('click', function () {
-                window.location.href = 'dashboard-buyer-cereals.jsp';
+    document.addEventListener('DOMContentLoaded', function () {
+        const fruitsRadio = document.querySelector('input[name="category"][value="fruits"]');
+        fruitsRadio.addEventListener('click', function () {
+            window.location.href = 'dashboard-buyer-fruit.jsp';
+        });
+
+        const cerealsRadio = document.querySelector('input[name="category"][value="cereals"]');
+        cerealsRadio.addEventListener('click', function () {
+            window.location.href = 'dashboard-buyer-cereals.jsp';
+        });
+
+        const buyButtons = document.querySelectorAll('.product-card button');
+        buyButtons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                let message = this.parentElement.querySelector('.success-message');
+                if (!message) {
+                    message = document.createElement('span');
+                    message.className = 'success-message';
+                    message.textContent = 'Added to Cart!';
+                    this.parentElement.appendChild(message);
+                }
+                message.style.display = 'inline';
+                setTimeout(() => {
+                    message.style.display = 'none';
+                }, 2000);
+                // Submit form if needed
+                // this.parentElement.submit();
             });
         });
+    });
     </script>
 </head>
 <body>
     <div class="sidebar">
-        <img src="../image/dash-logo.png" alt="Logo"> <!-- Replace with your logo path -->
+        <img src="../image/dash-logo.png" alt="Logo">
         <h2>AgriCare</h2>
         <ul>
-            <li><img src="../image/dashboard-icon.png" alt="Dashboard Icon"><a href="#">Dashboard</a></li> <!-- Replace with your icons -->
+            <li><img src="../image/dashboard-icon.png" alt="Dashboard Icon"><a href="#">Dashboard</a></li>
             <li><img src="../image/setting-icon.png" alt="Setting Icon"><a href="buyer-setting.jsp">Setting</a></li>
             <li><img src="../image/History-icon.png" alt="History Icon"><a href="#">History</a></li>
         </ul>
@@ -214,7 +244,7 @@
             <h1>Agriculture & Organic Market</h1>
             <div class="profile">
                 <img src="../image/profile-icon.png" alt="Profile Picture" width="40" height="40">
-                <span>Abhi Sharma</span> <!-- Changed name -->
+                <span>Abhi Sharma</span>
             </div>
         </div>
         <div class="card-container">
@@ -226,41 +256,53 @@
                     <label><input type="radio" name="category" value="cereals"> Cereals</label>
                 </div>
                 <div class="product-list">
-                    <div class="product-card">
-                        <div class="product-details">
-                            <img src="../image/onion.png" alt="Onion">
-                            <div>
-                                <h4>Onion</h4>
-                                <hr>
-                                <span>Rs 40/kg</span>
+                    <%
+                        if (vegetableProducts != null && !vegetableProducts.isEmpty()) {
+                            for(Product p : vegetableProducts) {
+                    %>
+                        <div class="product-card">
+                            <div class="product-details">
+                                <img src="<%= p.getImagePath() %>" alt="<%= p.getName() %>">
+                                <div>
+                                    <h4><%= p.getName() %></h4>
+                                    <hr>
+                                    <span>Rs <%= p.getPrice() %>/kg</span>
+                                </div>
                             </div>
+                            <form action="AddToCartServlet" method="post">
+                                <input type="hidden" name="productId" value="<%= p.getId() %>">
+                                <button id="btn">Buy</button>
+                            </form>
                         </div>
-                        <button id="btn">Buy</button>
-                    </div>
-                    <div class="product-card">
-                        <div class="product-details">
-                            <img src="../image/potato.png" alt="Potato">
-                            <div>
-                                <h4>Potato</h4>
-                                <hr>
-                                <span>Rs 50/kg</span>
-                            </div>
-                        </div>
-                        <button id="btn">Buy</button>
-                    </div>
-                    <div class="product-card">
-                        <div class="product-details">
-                            <img src="../image/cabbage.png" alt="Cabbage">
-                            <div>                               <h4>Cabbage</h4>
-                                <hr>
-                                <span>Rs 30/kg</span>
-                            </div>
-                        </div>
-                        <button id="btn">Buy</button>
-                    </div>
+                    <%
+                            }
+                        } else {
+                    %>
+                        <p>No vegetables available currently.</p>
+                    <%
+                        }
+                    %>
                 </div>
             </div>
+            
         </div>
+        <!-- Add this right before the closing </div> tag of the main-content div -->
+<div style="margin-top: 30px; text-align: center;">
+    <form action="buyer-cart.jsp">
+        <button type="submit" style="
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 15px 60px;
+            border-radius: 30px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: transform 0.3s ease-in-out;
+        " onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+            Go to Cart
+        </button>
+    </form>
+</div>
     </div>
 </body>
 </html>

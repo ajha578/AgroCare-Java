@@ -159,6 +159,7 @@
                 </a>
             </div>
             <div class="card">
+            	<a href="farmer-weather.jsp">
                 <img src="../image/dimage5.png" alt="Weather Forecast">
                 <img src="../image/dimage6.png" alt="Weather Forecast">
                 <h3>Weather Forecast</h3>

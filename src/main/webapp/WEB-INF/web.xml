@@ -49,4 +49,34 @@
     <servlet-name>loginfarmer</servlet-name>
     <url-pattern>/loginfarmer</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>AdminLoginServlet</display-name>
+    <servlet-name>AdminLoginServlet</servlet-name>
+    <servlet-class>AdminLoginServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AdminLoginServlet</servlet-name>
+    <url-pattern>/AdminLoginServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>UpdateBuyerProfile</display-name>
+    <servlet-name>UpdateBuyerProfile</servlet-name>
+    <servlet-class>UpdateBuyerProfile</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>UpdateBuyerProfile</servlet-name>
+    <url-pattern>/UpdateBuyerProfile</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>FarmerToSell</display-name>
+    <servlet-name>FarmerToSell</servlet-name>
+    <servlet-class>FarmerToSell</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>FarmerToSell</servlet-name>
+    <url-pattern>/FarmerToSell</url-pattern>
+  </servlet-mapping>
 </web-app>
